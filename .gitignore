@@ -48,4 +48,4 @@ next-env.d.ts
 # Local Netlify folder
 .netlify
 
-nodemon.json/
+nodemon.json
