@@ -1,0 +1,13 @@
+{
+  "NODE_ENV":"dev",
+  "watch": ["src"],
+  "ext": "ts,js,json",
+  "exec": "ts-node -r dotenv/config ./src/app.ts",
+ 
+  "ignore":["src/**/*.spec.ts"],
+  "env": {
+    "PORT": "5001",
+    "MONGODB_URI": "mongodb+srv://mainak407:BlogDb%40345@cluster0.vxmxn.mongodb.net/Blog",
+    "SYSTEM_API_KEY":"mainak407"
+  }
+}
