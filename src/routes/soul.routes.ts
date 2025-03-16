@@ -58,5 +58,45 @@ router.post(
   }
 );
 
+
+
+
+// route for creating a new user
+router.post('/create', async (req: Request, res: Response) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // console.log('Creating user:', name, email, password);
+
+
+    if (!name || !email || !password) {
+      res.status(utils.HttpStatusCodes.BAD_REQUEST).json({ error: "Please provide all required fields" });
+      return;
+    }
+
+    const user = await services.appWriteService.createUsers(name, email, password);
+    res.status(utils.HttpStatusCodes.CREATED).json(user);
+
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
+
+  }
+})
+
+
+// route for fetch user data
+router.get('/user', async (_req: Request, res: Response) => {
+  try {
+    const result = await services.appWriteService.getCurrentUser();
+    res.status(utils.HttpStatusCodes.OK).json(result);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
+
+  }
+})
+
+
 // route for hugging face sentiment analysis model
 export { router as SoulRouter };

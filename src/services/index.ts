@@ -1,3 +1,4 @@
-import soulService from "./soul.service";
+import soulService from "./models.service";
+import appWriteService from "./appWrite.service";
 
-export default{ soulService }; 
+export default { soulService, appWriteService }; 
