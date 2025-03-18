@@ -159,7 +159,7 @@ async function getHistoryChat(appwriteId: string) {
 
         // Extract chat history
         const userChatHistory = userDocument?.chatHistory || [];
-        console.log('User chat history:', userChatHistory);
+        // console.log('User chat history:', userChatHistory);
 
         return userChatHistory;
     } catch (error) {
@@ -186,7 +186,7 @@ async function getHistorySentiment(appwriteId: string) {
 
         // Extract chat history
         const userSentimentHistory = userDocument?.moodTrends || [];
-        console.log('User chat history:', userSentimentHistory);
+        // console.log('User chat history:', userSentimentHistory);
 
         return userSentimentHistory;
     } catch (error) {
