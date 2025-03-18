@@ -67,7 +67,7 @@ async function callSentimentAnalysis(message: string, apiKey: string): Promise<s
 
     provider: "hf-inference",
   });
-  console.log(output);
+  // console.log(output);
   return output[0].label;
 }
 

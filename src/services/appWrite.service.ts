@@ -1,4 +1,5 @@
-import { Account, Client, Databases, ID, Query, /* Avatars */ } from 'node-appwrite';
+import { Account, Client, Databases, ID, Query, /*Users,  Avatars */ } from 'node-appwrite';
+import * as Interfaces from '../interface/soul.interface';
 
 // Initialize Appwrite client
 const client = new Client();
@@ -66,6 +67,7 @@ async function createUsers(name: string, email: string, password: string) {
 // function for login
 async function login(email: string, password: string) {
     try {
+        // Create an email-password session
         const session = await account.createEmailPasswordSession(email, password);
 
         return session;
@@ -77,27 +79,26 @@ async function login(email: string, password: string) {
 }
 
 // function for get current user data
-async function getCurrentUser() {
+async function getCurrentUser(userId: string) {
     try {
-        const currentUser = await account.get();
-        if (!currentUser) {
-            throw new Error('Error getting current user');
+        if (!userId) throw new Error('User ID is required');
+
+        // Query user based on `userId` field in the database
+        const userData = await databases.listDocuments(databaseId, collectionId, [
+            Query.equal("userId", userId) // Ensure field name matches database schema
+        ]);
+
+        if (userData.documents.length === 0) {
+            throw new Error(`User with ID ${userId} not found in database`);
         }
 
-        const currentUserData = await databases.listDocuments(databaseId, collectionId, [Query.equal("userId", currentUser.$id)]);
-
-        if (currentUserData.documents.length === 0) {
-            throw new Error('Error getting current user data');
-        }
-
-        return currentUserData.documents[0];
-    }
-    catch (error) {
+        return userData.documents[0]; // Return the first matching document
+    } catch (error) {
         console.error('Error getting current user:', error);
         throw error;
-        // return null;
     }
 }
+
 
 // sign out function
 async function signOut() {
@@ -112,40 +113,49 @@ async function signOut() {
 }
 
 
-// function to update user data
-async function updateUserData(data: any) {
+// update user data
+async function updateUserData(appwriteId: string, updateFields: Partial<{ chatHistory: any[], moodTrends: any[]}>) {
     try {
-        const currentUser = await getCurrentUser();
-        const userId = currentUser?.$id;
+        if (!appwriteId) throw new Error("Document ID is required for update");
 
-        const updatePayload = { preferences: data };
+        const updatePayload: any = {};
+        if (updateFields.chatHistory) updatePayload.chatHistory = updateFields.chatHistory;
+        if (updateFields.moodTrends) updatePayload.moodTrends = updateFields.moodTrends;
 
-        const permissions = [
-            'read: ("any")']
+        if (Object.keys(updatePayload).length === 0) {
+            throw new Error("No valid fields provided for update");
+        }
 
+        // Update user document in Appwrite
+        const result = await databases.updateDocument(
+            databaseId,
+            collectionId,
+            appwriteId, // Ensure correct document ID
+            updatePayload
+        );
 
-        const result = await databases.updateDocument(databaseId, collectionId, userId + "", updatePayload, permissions);
         return result;
-    }
-    catch (error) {
-        console.error('Error updating user data:', error);
+    } catch (error) {
+        console.error("Error updating user data:", error);
         throw error;
     }
 }
 
 
 // get history chat
-async function getHistoryChat() {
+async function getHistoryChat(appwriteId: string) {
     try {
-        const currentUser = await getCurrentUser();
-        const userId = currentUser?.$id;
+        // const currentUser = await getCurrentUser(userId);
+        // const userId = currentUser?.$id;
 
-        if (!userId) {
+        if (!appwriteId) {
+            console.log('User not logged in');
+            
             throw new Error("User not logged in");
         }
 
         // Fetch user document from the database
-        const userDocument = await databases.getDocument(databaseId, collectionId, userId);
+        const userDocument = await databases.getDocument(databaseId, collectionId, appwriteId) as unknown as Interfaces.IUser;
 
         // Extract chat history
         const userChatHistory = userDocument?.chatHistory || [];
@@ -159,5 +169,33 @@ async function getHistoryChat() {
 }
 
 
+// get history chat
+async function getHistorySentiment(appwriteId: string) {
+    try {
+        // const currentUser = await getCurrentUser(userId);
+        // const userId = currentUser?.$id;
+
+        if (!appwriteId) {
+            console.log('User not logged in');
+            
+            throw new Error("User not logged in");
+        }
+
+        // Fetch user document from the database
+        const userDocument = await databases.getDocument(databaseId, collectionId, appwriteId) as unknown as Interfaces.IUser;
+
+        // Extract chat history
+        const userSentimentHistory = userDocument?.moodTrends || [];
+        console.log('User chat history:', userSentimentHistory);
+
+        return userSentimentHistory;
+    } catch (error) {
+        console.error('Error getting chat history:', error);
+        throw error;
+    }
+}
+
+
+
 // Export the function
-export default { createUsers, getCurrentUser, signOut, login, getHistoryChat, updateUserData };
+export default { createUsers, getCurrentUser, signOut, login, getHistoryChat, updateUserData,getHistorySentiment };
