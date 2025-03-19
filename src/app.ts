@@ -26,7 +26,7 @@ app.listen(process.env.PORT,()=>{
 // Schedule the cron job to run every 30 minutes
 cron.schedule('*/10 * * * *', async () => {
     try {
-      const response = await axios.get('https://bloging-backend-q74o.onrender.com');
+      const response = await axios.get('https://soulsync-backend.onrender.com');
       console.log(`✅ Success: ${response.status} - ${response.statusText}`);
     } catch (error:any) {
       console.error(`❌ Error: ${error.response ? error.response.status : error.message}`);
