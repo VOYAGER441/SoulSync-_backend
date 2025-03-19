@@ -5,8 +5,8 @@ import utils from "../utils";
 
 // global variable
 // const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://your-site.com"; // Optional
-const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "Your Site Name"; // Optional
+const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://soulsyncai.netlify.app/"; // Optional
+const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "soulsyncai"; // Optional
 const modelName = "deepseek/deepseek-r1:free";
 
 // function for calling the deepseek model
