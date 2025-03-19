@@ -85,7 +85,7 @@ router.post("/chat", chatLimiter, async (req: Request, res: Response): Promise<v
 
 
 // route for creating a new user
-router.post('/create', async (req: Request, res: Response) => {
+router.post('/registration', async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
 
@@ -98,11 +98,13 @@ router.post('/create', async (req: Request, res: Response) => {
     }
 
     const user = await services.appWriteService.createUsers(name, email, password);
+    console.log(user);
+    
     res.status(utils.HttpStatusCodes.CREATED).json(user);
 
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
+    res.status(utils.HttpStatusCodes.CONFLICT).json({ error: "Internal Server Error" });
 
   }
 })
@@ -111,6 +113,8 @@ router.post('/create', async (req: Request, res: Response) => {
 router.post('/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    // console.log('Logging in user:', email, password);
+    
     if (!email || !password) {
       res.status(utils.HttpStatusCodes.BAD_REQUEST).json({ error: "Please provide all required fields" });
       return;
