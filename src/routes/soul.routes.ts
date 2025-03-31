@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import services from "../services";
 import utils from "../utils";
 import * as Interface from "../interface/soul.interface"
+import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 router.use(express.json());
@@ -61,13 +62,13 @@ router.post("/chat", chatLimiter, async (req: Request, res: Response): Promise<v
     // Update chat history
     const updatedChatHistory = [
       ...user.chatHistory,
-      JSON.stringify({ message, reply, timestamp: new Date().toISOString() })
+      JSON.stringify({ id: uuidv4(), message, reply, timestamp: new Date().toISOString() })
     ];
 
     // Update sentiment history
     const updatedSentimentHistory = [
       ...user.moodTrends,
-      JSON.stringify({ sentiment, timestamp: new Date().toISOString() })
+      JSON.stringify({ id: uuidv4(), sentiment, timestamp: new Date().toISOString() })
     ];
 
 
@@ -99,7 +100,7 @@ router.post('/registration', async (req: Request, res: Response) => {
 
     const user = await services.appWriteService.createUsers(name, email, password);
     console.log(user);
-    
+
     res.status(utils.HttpStatusCodes.CREATED).json(user);
 
   } catch (error) {
@@ -114,7 +115,7 @@ router.post('/login', async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     // console.log('Logging in user:', email, password);
-    
+
     if (!email || !password) {
       res.status(utils.HttpStatusCodes.BAD_REQUEST).json({ error: "Please provide all required fields" });
       return;
