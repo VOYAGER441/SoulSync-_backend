@@ -58,18 +58,16 @@ async function callDeepSeek(message: string, apiKey: string): Promise<string> {
 }
 
 // function to call the hugging face model for sentiment analysis
-async function callSentimentAnalysis(message: string, apiKey: string): Promise<string> {
+async function callSentimentAnalysis(message: string, apiKey: string): Promise<{ label: string; score: number }[]> {
   // init client
   const client = new InferenceClient(apiKey);
   const output = await client.textClassification({
     model: "distilbert/distilbert-base-uncased-finetuned-sst-2-english",
     inputs: message,
-
     provider: "hf-inference",
   });
-  // console.log(output);
-  return output[0].label;
+  console.log(output);
+  return output; // Return the full data
 }
-
 
 export default { callDeepSeek, callSentimentAnalysis };

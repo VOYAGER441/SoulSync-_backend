@@ -59,6 +59,9 @@ router.post("/chat", chatLimiter, async (req: Request, res: Response): Promise<v
     const reply = await services.soulService.callDeepSeek(message.trim(), openRouterApiKey);
     const sentiment = await services.soulService.callSentimentAnalysis(message.trim(), huggingFaceApiKey);
 
+    // console.log("Sentiment analysis result:", sentiment);
+
+
     // Update chat history
     const updatedChatHistory = [
       ...user.chatHistory,
