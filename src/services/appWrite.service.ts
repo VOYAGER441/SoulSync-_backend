@@ -66,17 +66,25 @@ async function createUsers(name: string, email: string, password: string) {
 
 // function for login
 async function login(email: string, password: string) {
-    try {
+    
         // Create an email-password session
         const session = await account.createEmailPasswordSession(email, password);
+        const data = {
+            userId: session.userId,
+            secret: session.secret
+        };
 
-        return session;
-    }
-    catch (error) {
-        console.error('Error logging in:', error);
-        throw error;
-    }
+        return data;
+    
+    
 }
+
+
+// function for login with google
+async function loginWithGoogle() {
+
+}
+
 
 // function for get current user data
 async function getCurrentUser(userId: string) {
@@ -196,6 +204,21 @@ async function getHistorySentiment(appwriteId: string) {
 }
 
 
+// function to get chats by chatId
+async function getChatById(chatId: string) {    
+    
+        if (!chatId) throw new Error("Chat ID is required");
+
+        
+        
+
+        
+    
+}
+
+
+
+
 
 // Export the function
-export default { createUsers, getCurrentUser, signOut, login, getHistoryChat, updateUserData,getHistorySentiment };
+export default { createUsers, getCurrentUser, signOut, login, getHistoryChat, updateUserData,getHistorySentiment,getChatById ,loginWithGoogle};

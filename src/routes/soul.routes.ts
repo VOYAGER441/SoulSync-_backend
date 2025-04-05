@@ -132,6 +132,13 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
+// route for login with google
+router.post('/login/google', async (req: Request, res: Response) => {
+    
+})
+
+
+
 
 // route for fetch user data
 router.get('/user/:userId', async (req: Request, res: Response) => {
@@ -189,7 +196,20 @@ router.get('/mood/:userId', async (req: Request, res: Response) => {
     res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
 
   }
-})
+});
+
+
+router.get("/chats/:chatId", async (req: Request, res: Response) => {
+  try {
+    const chatId: string = req.params.chatId;
+    const result = await services.appWriteService.getChatById(chatId);
+    res.status(utils.HttpStatusCodes.OK).json(result);
+  } catch (error) {
+    console.error("Error fetching chat:", error);
+    res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 
