@@ -132,10 +132,7 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
-// route for login with google
-router.post('/login/google', async (req: Request, res: Response) => {
-    
-})
+
 
 
 

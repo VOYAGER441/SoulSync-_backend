@@ -165,7 +165,7 @@ async function getHistoryChat(appwriteId: string) {
         // Fetch user document from the database
         const userDocument = await databases.getDocument(databaseId, collectionId, appwriteId) as unknown as Interfaces.IUser;
 
-        // Extract chat history
+        // Extract chat history 
         const userChatHistory = userDocument?.chatHistory || [];
         // console.log('User chat history:', userChatHistory);
 
