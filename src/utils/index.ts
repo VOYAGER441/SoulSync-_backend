@@ -1,6 +1,7 @@
 // import { v4 as uuid } from "uuid";
 import { ObjectId } from "mongodb";
 import safety from "./safety";
+import { v4 as uuidv4 } from "uuid";
 
 
 export enum HttpStatusCodes {
@@ -33,9 +34,16 @@ const stringToObjectId = (id: string) => {
   return new ObjectId(id);
 };
 
+const generateUUID = () => {
+  const id = uuidv4();
+  return id;
+}
+
 export default {
   HttpStatusCodes,
   toString,
   safety,
   stringToObjectId,
+  generateUUID
+
 };

@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
 // import error from "../error";
 import rateLimit from "express-rate-limit";
+import * as Interface from "../interface/soul.interface";
 import services from "../services";
 import utils from "../utils";
-import * as Interface from "../interface/soul.interface"
-import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 router.use(express.json());
@@ -60,18 +59,19 @@ router.post("/chat", chatLimiter, async (req: Request, res: Response): Promise<v
     const sentiment = await services.soulService.callSentimentAnalysis(message.trim(), huggingFaceApiKey);
 
     // console.log("Sentiment analysis result:", sentiment);
-
+    // generate a unique ID for the chat message and sentiment
+    const id = utils.generateUUID()
 
     // Update chat history
     const updatedChatHistory = [
       ...user.chatHistory,
-      JSON.stringify({ id: uuidv4(), message, reply, timestamp: new Date().toISOString() })
+      JSON.stringify({ id: id, message, reply, timestamp: new Date().toISOString() })
     ];
 
     // Update sentiment history
     const updatedSentimentHistory = [
       ...user.moodTrends,
-      JSON.stringify({ id: uuidv4(), sentiment, timestamp: new Date().toISOString() })
+      JSON.stringify({ id: id, sentiment, timestamp: new Date().toISOString() })
     ];
 
 
@@ -162,10 +162,23 @@ router.get('/chat/:userId', async (req: Request, res: Response) => {
     }
 
     // const user = userDocs.documents[0] as unknown as Interface.IUser;
-    const appwriteId = user.$id;
+    const appwriteUserId = user.$id;
 
-    const result = await services.appWriteService.getHistoryChat(appwriteId);
-    res.status(utils.HttpStatusCodes.OK).json(result);
+    const chatStrings = await services.appWriteService.getHistoryChat(appwriteUserId);
+    const sentiments = await services.appWriteService.getHistorySentiment(appwriteUserId);
+
+    const merged: any[] = [];
+
+    for (let i = 0; i < chatStrings.length; i++) {
+      const chat = JSON.parse(chatStrings[i] as unknown as string);
+      const sentiment = JSON.parse(sentiments[i] as unknown as string);
+      merged.push({
+        ...chat,
+        ...sentiment,
+      });
+    }
+
+    res.status(utils.HttpStatusCodes.OK).json({ result: merged });
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
@@ -212,3 +225,4 @@ router.get("/chats/:chatId", async (req: Request, res: Response) => {
 
 // route for hugging face sentiment analysis model
 export { router as SoulRouter };
+
