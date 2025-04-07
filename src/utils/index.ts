@@ -34,10 +34,16 @@ const stringToObjectId = (id: string) => {
   return new ObjectId(id);
 };
 
+const generatedIds = new Set<string>();
+
 const generateUUID = () => {
-  const id = uuidv4();
+  let id;
+  do {
+    id = uuidv4();
+  } while (generatedIds.has(id));
+  generatedIds.add(id);
   return id;
-}
+};
 
 export default {
   HttpStatusCodes,

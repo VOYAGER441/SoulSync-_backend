@@ -171,10 +171,10 @@ router.get('/chat/:userId', async (req: Request, res: Response) => {
 
     for (let i = 0; i < chatStrings.length; i++) {
       const chat = JSON.parse(chatStrings[i] as unknown as string);
-      const sentiment = JSON.parse(sentiments[i] as unknown as string);
+      const sentiment = sentiments[i] ? JSON.parse(sentiments[i] as unknown as string) : null;
       merged.push({
         ...chat,
-        ...sentiment,
+        ...(sentiment || {}),
       });
     }
 
