@@ -200,7 +200,11 @@ router.get('/mood/:userId', async (req: Request, res: Response) => {
     const appwriteId = user.$id;
 
     const result = await services.appWriteService.getHistorySentiment(appwriteId);
-    res.status(utils.HttpStatusCodes.OK).json(result);
+
+    // Ensure result is parsed only if it's a string
+    const response = typeof result === "string" ? JSON.parse(result) : result;
+
+    res.status(utils.HttpStatusCodes.OK).json(response);
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
