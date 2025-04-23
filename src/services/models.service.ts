@@ -66,7 +66,7 @@ async function callSentimentAnalysis(message: string, apiKey: string): Promise<{
     inputs: message,
     provider: "hf-inference",
   });
-  console.log(output);
+  // console.log(output);
   return output; // Return the full data
 }
 

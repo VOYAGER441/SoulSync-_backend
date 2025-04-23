@@ -78,7 +78,8 @@ router.post("/chat", chatLimiter, async (req: Request, res: Response): Promise<v
     await services.appWriteService.updateUserData(appwriteId, { chatHistory: updatedChatHistory });
     await services.appWriteService.updateUserData(appwriteId, { moodTrends: updatedSentimentHistory });
 
-    res.status(utils.HttpStatusCodes.OK).json({ reply, sentiment, chatHistory: updatedChatHistory });
+    res.status(utils.HttpStatusCodes.OK).json({ reply, sentiment });
+    // res.status(utils.HttpStatusCodes.OK).json({ reply, sentiment, chatHistory: updatedChatHistory });
   } catch (er) {
     console.error("Error in /chat route:", er);
     res.status(utils.HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Internal Server Error" });
