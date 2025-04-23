@@ -7,7 +7,7 @@ import utils from "../utils";
 // const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://soulsyncai.netlify.app/"; // Optional
 const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "soulsyncai"; // Optional
-const modelName = "deepseek/deepseek-r1-zero:free";
+const modelName = "deepseek/deepseek-r1:free";
 
 // function for calling the deepseek model
 async function callDeepSeek(message: string, apiKey: string): Promise<string> {
@@ -28,7 +28,7 @@ async function callDeepSeek(message: string, apiKey: string): Promise<string> {
         { role: "system", content: utils.safety.psychologistPrompt },
         { role: "user", content: message },
       ],
-      max_tokens: 1000,
+      max_tokens: 500,
       temperature: 0.6,
       top_p: 0.9,
     },
