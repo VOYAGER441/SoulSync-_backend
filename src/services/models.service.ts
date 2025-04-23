@@ -7,7 +7,7 @@ import utils from "../utils";
 // const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://soulsyncai.netlify.app/"; // Optional
 const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "soulsyncai"; // Optional
-const modelName = "deepseek/deepseek-chat-v3-0324:free";
+const modelName = "deepseek/deepseek-r1-zero:free";
 
 // function for calling the deepseek model
 async function callDeepSeek(message: string, apiKey: string): Promise<string> {
