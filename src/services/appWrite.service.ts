@@ -24,7 +24,7 @@ async function createUsers(name: string, email: string, password: string) {
     try {
         // Step 1: Create the user account
         const user = await account.create(ID.unique(), email, password, name);
-        console.log('User created successfully:', user);
+        // console.log('User created successfully:', user);
 
         if (!user.$id) {
             throw new Error('Error creating user');
@@ -32,7 +32,7 @@ async function createUsers(name: string, email: string, password: string) {
 
         const AvatarUrl = `https://cloud.appwrite.io/v1/avatars/initials?name=${encodeURIComponent(name)}`;
 
-        console.log('Avatar URL:', AvatarUrl);
+        // console.log('Avatar URL:', AvatarUrl);
 
 
         try {
@@ -56,11 +56,11 @@ async function createUsers(name: string, email: string, password: string) {
             }
         );
 
-        console.log('User data saved to database');
+        // console.log('User data saved to database');
         return newUser;
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error creating user:', error);
-        throw error;
+        throw error.response?.message || error.message || 'An error occurred while creating the user';
     }
 }
 
@@ -157,7 +157,7 @@ async function getHistoryChat(appwriteId: string) {
         // const userId = currentUser?.$id;
 
         if (!appwriteId) {
-            console.log('User not logged in');
+            // console.log('User not logged in');
             
             throw new Error("User not logged in");
         }
@@ -184,7 +184,7 @@ async function getHistorySentiment(appwriteId: string) {
         // const userId = currentUser?.$id;
 
         if (!appwriteId) {
-            console.log('User not logged in');
+            // console.log('User not logged in');
             
             throw new Error("User not logged in");
         }

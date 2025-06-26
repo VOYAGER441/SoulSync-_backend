@@ -103,13 +103,13 @@ router.post('/registration', async (req: Request, res: Response) => {
     }
 
     const user = await services.appWriteService.createUsers(name, email, password);
-    console.log(user);
+    // console.log(user);
 
     res.status(utils.HttpStatusCodes.CREATED).json(user);
 
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(utils.HttpStatusCodes.CONFLICT).json({ error: "Internal Server Error" });
+    res.status(utils.HttpStatusCodes.CONFLICT).json(error);
 
   }
 })
