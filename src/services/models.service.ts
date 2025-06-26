@@ -5,8 +5,8 @@ import utils from "../utils";
 
 // global variable
 // const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://soulsyncai.netlify.app/"; // Optional
-const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "soulsyncai"; // Optional
+const YOUR_SITE_URL = process.env.YOUR_SITE_URL || "https://soulsyncai.netlify.app/"; 
+const YOUR_SITE_NAME = process.env.YOUR_SITE_NAME || "soulsyncai"; 
 const modelName = "deepseek/deepseek-r1:free";
 
 // function for calling the deepseek model
@@ -35,8 +35,8 @@ async function callDeepSeek(message: string, apiKey: string): Promise<string> {
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": YOUR_SITE_URL, // Optional
-        "X-Title": YOUR_SITE_NAME, // Optional
+        "HTTP-Referer": YOUR_SITE_URL, 
+        "X-Title": YOUR_SITE_NAME, 
         "Content-Type": "application/json",
       },
       timeout: 10000, // 10-second timeout
